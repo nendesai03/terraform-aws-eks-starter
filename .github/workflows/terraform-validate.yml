@@ -1,0 +1,36 @@
+name: Terraform Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dir:
+          - modules/vpc
+          - modules/eks
+          - examples/basic
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "~> 1.5"
+
+      - name: Format check
+        run: terraform fmt -check -recursive
+
+      - name: Init
+        working-directory: ${{ matrix.dir }}
+        run: terraform init -backend=false
+
+      - name: Validate
+        working-directory: ${{ matrix.dir }}
+        run: terraform validate
