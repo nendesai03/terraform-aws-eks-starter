@@ -1,0 +1,7 @@
+region       = "us-east-1"
+cluster_name = "eks-starter-demo"
+
+# Restrict API access to your own IP (find it with: curl ifconfig.me)
+public_access_cidrs = ["YOUR.IP.ADDRESS.HERE/32"]
+
+node_instance_types = ["t3.medium"]
